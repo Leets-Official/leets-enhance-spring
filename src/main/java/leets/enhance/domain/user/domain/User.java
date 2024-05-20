@@ -20,32 +20,38 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @Column(columnDefinition = "char(13)", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @ColumnDefault("3")
+    @Column(nullable = false)
     private Integer upgradeCouponRemaining;
 
     @OneToOne
     @JoinColumn(name = "uid", columnDefinition = "BINARY(16)")
     private Blade blade;
 
-    @Column(nullable = false)
     private String refreshToken;
 
-    public static User create(String username, String password, Blade blade, String refreshToken) {
+    public static User create(String username, String password, Integer upgradeCouponRemaining) {
         return User.builder()
                 .username(username)
                 .password(password)
-                .blade(blade)
-                .refreshToken(refreshToken)
+                .upgradeCouponRemaining(upgradeCouponRemaining)
                 .build();
     }
 
     @Builder
-    public User(String username, String password, Blade blade, String refreshToken) {
+    public User(String username, String password, Integer upgradeCouponRemaining) {
         this.username = username;
         this.password = password;
+        this.upgradeCouponRemaining = upgradeCouponRemaining;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateUser(Blade blade, String refreshToken) {
         this.blade = blade;
         this.refreshToken = refreshToken;
     }
