@@ -1,6 +1,7 @@
 package leets.enhance.domain.user.domain;
 
 import jakarta.persistence.*;
+import leets.enhance.domain.Blade.domain.Blade;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
