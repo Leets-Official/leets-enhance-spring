@@ -59,4 +59,8 @@ public class UserRegister implements UserTokenService{
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
     }
+
+    public Boolean isUsernameDuplicated(String username) {
+        return userRepository.existsUserByUsername(username);
+    }
 }
