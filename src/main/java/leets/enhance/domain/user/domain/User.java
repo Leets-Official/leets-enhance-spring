@@ -2,6 +2,7 @@ package leets.enhance.domain.user.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.UUID;
 
@@ -21,21 +22,30 @@ public class User {
     @Column(columnDefinition = "char(13)", nullable = false)
     private String password;
 
+    @ColumnDefault("3")
+    private Integer upgradeCouponRemaining;
+
+    @OneToOne
+    @JoinColumn(name = "uid", columnDefinition = "BINARY(16)")
+    private Blade blade;
+
     @Column(nullable = false)
     private String refreshToken;
 
-    public static User create(String username, String password, String refreshToken) {
+    public static User create(String username, String password, Blade blade, String refreshToken) {
         return User.builder()
                 .username(username)
                 .password(password)
+                .blade(blade)
                 .refreshToken(refreshToken)
                 .build();
     }
 
     @Builder
-    public User(String username, String password, String refreshToken) {
+    public User(String username, String password, Blade blade, String refreshToken) {
         this.username = username;
         this.password = password;
+        this.blade = blade;
         this.refreshToken = refreshToken;
     }
 }
