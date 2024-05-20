@@ -12,6 +12,7 @@ import leets.enhance.global.jwt.exception.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,18 +22,28 @@ public class UserRegister implements UserTokenService{
     private final BladeRepository bladeRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public RegisterResponse execute(String username, String password, String bladeName) {
-        User user = User.create(username, passwordEncoder.encode(password), 3);
-        userRepository.save(user);
-
-        Blade blade = Blade.create(bladeName, Level.LV1, user);
-        bladeRepository.save(blade);
+        User user = createUser(username, password);
+        Blade blade = createBlade(bladeName, user);
 
         String refreshToken = generateRefreshToken(user);
         user.updateUser(blade, refreshToken);
 
         userRepository.save(user);
         return new RegisterResponse(true, "가입 성공");
+    }
+
+    private User createUser(String username, String password) {
+        User user = User.create(username, passwordEncoder.encode(password), 3);
+        userRepository.save(user);
+        return user;
+    }
+
+    private Blade createBlade(String bladeName, User user) {
+        Blade blade = Blade.create(bladeName, Level.LV1, user);
+        bladeRepository.save(blade);
+        return blade;
     }
 
     @Override
