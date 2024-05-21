@@ -47,7 +47,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize) ->
-                        authorize.anyRequest()
+                        authorize.requestMatchers("/user/**").permitAll()
+                                .requestMatchers(("/item/top10")).permitAll()
+                                .anyRequest()
                                 .permitAll()
                 );
 
