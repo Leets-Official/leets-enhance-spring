@@ -8,7 +8,6 @@ import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;
 import leets.enhance.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +18,8 @@ public class GetBlade {
     private final BladeRepository bladeRepository;
     private final UserRepository userRepository;
 
-    public SingleItemResponse executeForSingleUser(Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
+    public SingleItemResponse executeForSingleUser(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
 
         Blade blade = user.getBlade();

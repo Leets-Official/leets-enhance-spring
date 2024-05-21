@@ -5,10 +5,9 @@ import leets.enhance.domain.Blade.response.SingleItemResponse;
 import leets.enhance.domain.Blade.response.Top10ItemResponse;
 import leets.enhance.domain.Blade.usecase.CreateBlade;
 import leets.enhance.domain.Blade.usecase.GetBlade;
-import leets.enhance.domain.user.dto.request.RegisterRequest;
+import leets.enhance.global.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,23 +16,24 @@ import org.springframework.web.bind.annotation.*;
 public class BladeController {
     private final CreateBlade createBlade;
     private final GetBlade getBlade;
+    private final JwtProvider jwtProvider;
 
     @PatchMapping
-    public ResponseEntity<RegisterResponse> createBlade(@RequestParam String bladeName,
-                                                                   Authentication authentication) {
-        RegisterResponse registerResponse = createBlade.execute(bladeName, authentication.getName());
+    public ResponseEntity<RegisterResponse> createBlade(@RequestHeader("Authorization") String authorizationHeader,
+                                                        @RequestParam String bladeName) {
+        RegisterResponse registerResponse = createBlade.execute(bladeName, jwtProvider.getUsernameFromToken(authorizationHeader));
         return ResponseEntity.ok(registerResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<SingleItemResponse> getSingleItemFromUser(@RequestHeader("Authorization") String authorizationHeader) {
+        SingleItemResponse response = getBlade.executeForSingleUser(jwtProvider.getUsernameFromToken(authorizationHeader));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/top10")
     public ResponseEntity<Top10ItemResponse> getTop10Items() {
         Top10ItemResponse response = getBlade.executeForTop10();
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<SingleItemResponse> getSingleItemFromUser(Authentication authentication) {
-        SingleItemResponse response = getBlade.executeForSingleUser();
         return ResponseEntity.ok(response);
     }
 }

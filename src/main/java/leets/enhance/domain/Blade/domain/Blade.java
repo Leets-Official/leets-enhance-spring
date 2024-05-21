@@ -1,7 +1,6 @@
 package leets.enhance.domain.Blade.domain;
 
 import jakarta.persistence.*;
-import leets.enhance.domain.Blade.status.Level;
 import leets.enhance.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;

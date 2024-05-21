@@ -81,4 +81,14 @@ public class JwtProvider {
             throw new ExpiredTokenException();
         }
     }
+
+    public String getUsernameFromToken(String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new InvalidTokenException();
+        }
+        String token = authorizationHeader.substring(7);
+
+        Claims claims = parseClaims(token);
+        return claims.getSubject();
+    }
 }
