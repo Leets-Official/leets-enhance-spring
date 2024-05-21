@@ -23,15 +23,14 @@ public class Blade {
     @Column(columnDefinition = "char(5)", nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Level level;
+    private Integer level;
 
     @OneToOne
     @JoinColumn(name = "uid", columnDefinition = "BINARY(16)")
     private User user;
 
-    public static Blade create(String name, Level level, User user) {
+    public static Blade create(String name, Integer level, User user) {
         return Blade.builder()
                 .name(name)
                 .level(level)
@@ -40,7 +39,7 @@ public class Blade {
     }
 
     @Builder
-    public Blade(String name, Level level, User user) {
+    public Blade(String name, Integer level, User user) {
         this.name = name;
         this.level = level;
         this.user = user;

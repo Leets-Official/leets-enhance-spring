@@ -18,7 +18,7 @@ public class CreateBlade {
 
     public RegisterResponse execute(String bladeName, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        Blade blade = Blade.create(bladeName, Level.LV1, user);
+        Blade blade = Blade.create(bladeName, Level.LV1.getLevel(), user);
         bladeRepository.save(blade);
 
         user.createBlade(blade);
