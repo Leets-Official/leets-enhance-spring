@@ -1,8 +1,5 @@
 package leets.enhance.domain.user.usecase;
 
-import leets.enhance.domain.Blade.domain.Blade;
-import leets.enhance.domain.Blade.domain.repository.BladeRepository;
-import leets.enhance.domain.Blade.status.Level;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;
 import leets.enhance.domain.user.dto.response.RegisterResponse;
@@ -19,16 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserRegister implements UserTokenService{
     private final JwtProvider tokenProvider;
     private final UserRepository userRepository;
-    private final BladeRepository bladeRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public RegisterResponse execute(String username, String password, String bladeName) {
+    public RegisterResponse execute(String username, String password) {
         User user = createUser(username, password);
-        Blade blade = createBlade(bladeName, user);
 
         String refreshToken = generateRefreshToken(user);
-        user.updateUser(blade, refreshToken);
+        user.updateRefreshToken(refreshToken);
 
         userRepository.save(user);
         return new RegisterResponse(true, "가입 성공");
@@ -38,12 +33,6 @@ public class UserRegister implements UserTokenService{
         User user = User.create(username, passwordEncoder.encode(password), 3);
         userRepository.save(user);
         return user;
-    }
-
-    private Blade createBlade(String bladeName, User user) {
-        Blade blade = Blade.create(bladeName, Level.LV1, user);
-        bladeRepository.save(blade);
-        return blade;
     }
 
     @Override

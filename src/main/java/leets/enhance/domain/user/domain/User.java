@@ -51,8 +51,7 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public void updateUser(Blade blade, String refreshToken) {
+    public void createBlade(Blade blade) {
         this.blade = blade;
-        this.refreshToken = refreshToken;
     }
 }

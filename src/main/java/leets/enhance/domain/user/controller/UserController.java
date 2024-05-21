@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
-        RegisterResponse registerResponse = userRegister.execute(request.username(), request.password(), request.bladeName());
+        RegisterResponse registerResponse = userRegister.execute(request.username(), request.password());
         return ResponseEntity.ok(registerResponse);
     }
 
