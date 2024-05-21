@@ -20,7 +20,7 @@ public class BladeController {
 
     @PatchMapping
     public ResponseEntity<RegisterResponse> createBlade(@RequestHeader("Authorization") String authorizationHeader,
-                                                        @RequestParam String bladeName) {
+                                                        @RequestParam(value = "bladeName") String bladeName) {
         RegisterResponse registerResponse = createBlade.execute(bladeName, jwtProvider.getUsernameFromToken(authorizationHeader));
         return ResponseEntity.ok(registerResponse);
     }
