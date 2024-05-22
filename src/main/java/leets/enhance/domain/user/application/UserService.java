@@ -29,7 +29,7 @@ public class UserService {
                 .password(userRequest.password())
                 .build();
         userRepository.save(user);
-        return SignUpResponse.fromUser(user);
+        return SignUpResponse.of(user);
     }
 
     public LoginResponse login(LoginRequest loginRequest) {

@@ -10,7 +10,7 @@ public record SignUpResponse (
         UUID userId,
         String name
 ){
-    public static SignUpResponse fromUser(User user) {
+    public static SignUpResponse of(User user) {
         return new SignUpResponse(user.getUserId(), user.getNickname());
     }
 }
