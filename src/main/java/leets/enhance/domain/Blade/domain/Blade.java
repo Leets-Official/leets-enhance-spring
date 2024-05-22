@@ -1,6 +1,7 @@
 package leets.enhance.domain.Blade.domain;
 
 import jakarta.persistence.*;
+import leets.enhance.domain.Blade.status.Level;
 import leets.enhance.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,13 +24,13 @@ public class Blade {
     private String name;
 
     @Column(nullable = false)
-    private Integer level;
+    private Level level;
 
     @OneToOne
     @JoinColumn(name = "uid", columnDefinition = "BINARY(16)")
     private User user;
 
-    public static Blade create(String name, Integer level, User user) {
+    public static Blade create(String name, Level level, User user) {
         return Blade.builder()
                 .name(name)
                 .level(level)
@@ -38,9 +39,13 @@ public class Blade {
     }
 
     @Builder
-    public Blade(String name, Integer level, User user) {
+    public Blade(String name, Level level, User user) {
         this.name = name;
         this.level = level;
         this.user = user;
+    }
+
+    public void updateLevel(Level level) {
+        this.level = level;
     }
 }

@@ -1,9 +1,10 @@
 package leets.enhance.domain.Blade.dto.response;
 
 import leets.enhance.domain.Blade.domain.Blade;
+import leets.enhance.domain.Blade.status.Level;
 
 public record SingleItemResponse(String bladeName,
-                                 Integer level,
+                                 Level level,
                                  String username) {
 
     public static SingleItemResponse of(Blade blade) {
