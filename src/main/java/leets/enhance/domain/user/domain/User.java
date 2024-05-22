@@ -52,4 +52,8 @@ public class User {
     public void createBlade(Blade blade) {
         this.blade = blade;
     }
+
+    public void updateCouponRemaining(Integer upgradeCouponRemaining) {
+        this.upgradeCouponRemaining = upgradeCouponRemaining;
+    }
 }
