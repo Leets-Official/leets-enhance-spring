@@ -20,11 +20,11 @@ public class TokenProvider {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String createToken(String id) {
+    public String createToken(String email) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + expiration);
         return Jwts.builder()
-                .setSubject(id)
+                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -50,12 +50,12 @@ public class TokenProvider {
         }
     }
 
-    public String getId(String token) {
+    public String getEmail(String token) {
         return parseClaims(token).getSubject();
     }
 
     public Authentication getAuthentication(String token) {
-        return new PreAuthenticatedAuthenticationToken(this.getId(token),null, null);
+        return new PreAuthenticatedAuthenticationToken(this.getEmail(token),null, null);
     }
 
 
