@@ -1,9 +1,11 @@
 package leets.enhance.domain.Blade.controller;
 
+import leets.enhance.domain.Blade.dto.response.EnhanceResponse;
 import leets.enhance.domain.Blade.dto.response.RegisterResponse;
 import leets.enhance.domain.Blade.dto.response.SingleItemResponse;
 import leets.enhance.domain.Blade.dto.response.Top10ItemResponse;
 import leets.enhance.domain.Blade.usecase.CreateBlade;
+import leets.enhance.domain.Blade.usecase.EnhanceBlade;
 import leets.enhance.domain.Blade.usecase.GetBlade;
 import leets.enhance.global.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class BladeController {
     private final CreateBlade createBlade;
     private final GetBlade getBlade;
+    private final EnhanceBlade enhanceBlade;
     private final JwtProvider jwtProvider;
 
     @PatchMapping
@@ -34,6 +37,13 @@ public class BladeController {
     @GetMapping("/top10")
     public ResponseEntity<Top10ItemResponse> getTop10Items() {
         Top10ItemResponse response = getBlade.executeForTop10();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/enhance")
+    public ResponseEntity<EnhanceResponse> enhance(@RequestHeader("Authorization") String authorizationHeader,
+                                                   @RequestParam(value = "useCoupon") Boolean useCoupon) {
+        EnhanceResponse response = enhanceBlade.execute(jwtProvider.getUsernameFromToken(authorizationHeader), useCoupon);
         return ResponseEntity.ok(response);
     }
 }
