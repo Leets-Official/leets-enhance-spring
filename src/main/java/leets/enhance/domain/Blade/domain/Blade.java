@@ -23,11 +23,11 @@ public class Blade {
     @Column(columnDefinition = "char(5)", nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Level level;
 
-    @OneToOne
-    @JoinColumn(name = "uid", columnDefinition = "BINARY(16)")
+    @OneToOne(mappedBy = "blade")
     private User user;
 
     public static Blade create(String name, Level level, User user) {

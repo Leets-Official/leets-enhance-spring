@@ -3,8 +3,6 @@ package leets.enhance.domain.user.domain;
 import jakarta.persistence.*;
 import leets.enhance.domain.Blade.domain.Blade;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-
 import java.util.UUID;
 
 @Entity(name = "user")
@@ -27,7 +25,7 @@ public class User {
     private Integer upgradeCouponRemaining;
 
     @OneToOne
-    @JoinColumn(name = "uid", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "blade_uid", columnDefinition = "BINARY(16)")
     private Blade blade;
 
     private String refreshToken;
