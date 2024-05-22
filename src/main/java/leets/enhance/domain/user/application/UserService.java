@@ -3,9 +3,7 @@ package leets.enhance.domain.user.application;
 
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.dto.SignUpRequest;
-import leets.enhance.domain.user.dto.SignUpResponse;
-import leets.enhance.domain.user.dto.UserRequest;
-import leets.enhance.domain.user.dto.UserResponse;
+import leets.enhance.domain.user.dto.SignUpResponse;;
 import leets.enhance.domain.user.exception.ConflictIdException;
 import leets.enhance.domain.user.repository.UserRepository;
 import leets.enhance.global.jwt.TokenProvider;
@@ -20,7 +18,7 @@ public class UserService {
 
     public SignUpResponse register(SignUpRequest userRequest) throws Exception{
         String email = userRequest.email();
-        if(userRepository.findById(email).isPresent()) throw new ConflictIdException();
+        if(userRepository.findByEmail(email).isPresent()) throw new ConflictIdException();
         User user = User.builder()
                 .email(email)
                 .nickname(userRequest.name())
@@ -31,7 +29,7 @@ public class UserService {
     }
 
     public String checkDuplicateId(String email) throws Exception{
-        if(userRepository.findById(email).isPresent()){
+        if(userRepository.findByEmail(email).isPresent()){
             throw new ConflictIdException();
         }
         return email;

@@ -1,7 +1,6 @@
 package leets.enhance.domain.user.domain;
 
 import jakarta.persistence.*;
-import leets.enhance.domain.user.dto.UserRequest;
 import lombok.*;
 
 import java.util.UUID;
@@ -11,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+@Table(name="users")
 @Builder
 public class User {
     @Id
