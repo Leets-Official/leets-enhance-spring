@@ -1,8 +1,8 @@
 package leets.enhance.domain.Blade.controller;
 
-import leets.enhance.domain.Blade.response.RegisterResponse;
-import leets.enhance.domain.Blade.response.SingleItemResponse;
-import leets.enhance.domain.Blade.response.Top10ItemResponse;
+import leets.enhance.domain.Blade.dto.response.RegisterResponse;
+import leets.enhance.domain.Blade.dto.response.SingleItemResponse;
+import leets.enhance.domain.Blade.dto.response.Top10ItemResponse;
 import leets.enhance.domain.Blade.usecase.CreateBlade;
 import leets.enhance.domain.Blade.usecase.GetBlade;
 import leets.enhance.global.jwt.JwtProvider;

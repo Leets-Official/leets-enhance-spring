@@ -2,8 +2,8 @@ package leets.enhance.domain.Blade.usecase;
 
 import leets.enhance.domain.Blade.domain.Blade;
 import leets.enhance.domain.Blade.domain.repository.BladeRepository;
-import leets.enhance.domain.Blade.response.SingleItemResponse;
-import leets.enhance.domain.Blade.response.Top10ItemResponse;
+import leets.enhance.domain.Blade.dto.response.SingleItemResponse;
+import leets.enhance.domain.Blade.dto.response.Top10ItemResponse;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;
 import leets.enhance.domain.user.exception.UserNotFoundException;

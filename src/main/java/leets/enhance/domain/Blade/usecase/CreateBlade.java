@@ -2,7 +2,7 @@ package leets.enhance.domain.Blade.usecase;
 
 import leets.enhance.domain.Blade.domain.Blade;
 import leets.enhance.domain.Blade.domain.repository.BladeRepository;
-import leets.enhance.domain.Blade.response.RegisterResponse;
+import leets.enhance.domain.Blade.dto.response.RegisterResponse;
 import leets.enhance.domain.Blade.status.Level;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;

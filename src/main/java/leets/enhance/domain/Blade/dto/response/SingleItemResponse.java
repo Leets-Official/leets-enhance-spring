@@ -1,4 +1,4 @@
-package leets.enhance.domain.Blade.response;
+package leets.enhance.domain.Blade.dto.response;
 
 import leets.enhance.domain.Blade.domain.Blade;
 
