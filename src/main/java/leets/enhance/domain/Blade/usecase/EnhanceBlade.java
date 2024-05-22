@@ -16,7 +16,9 @@ import java.util.Random;
 public class EnhanceBlade {
     private final UserRepository userRepository;
     private final Random random = new Random();
-    private final BladeRepository bladeRepository;
+    private final EnhanceSuccess enhanceSuccess;
+    private final EnhanceFailWithoutBreak enhanceFailWithoutBreak;
+    private final EnhanceFailWithBreak enhanceFailWithBreak;
 
     public EnhanceResponse execute(String username, Boolean useCoupon) {
         Blade blade = userRepository.findByUsername(username)
@@ -34,34 +36,15 @@ public class EnhanceBlade {
             handleCouponRemaining();
         }
 
-        if (random.nextDouble() <= successProbability) {// 무기 강화
-            return handleSuccess(blade, level);
+        if (random.nextDouble() <= successProbability) {
+            return enhanceSuccess.handle(blade, level);
         }
-        if (random.nextDouble() <= level.getBreakProbability()) { // 파괴 성공
-            return handleFailWithBreak(blade);
+        if (random.nextDouble() <= level.getBreakProbability()) {
+            return enhanceFailWithBreak.handle(blade, level);
         }
-        return handleFailWithoutBreak(blade, level);
+        return enhanceFailWithoutBreak.handle(blade, level);
     }
 
     private void handleCouponRemaining() {
-    }
-
-    private EnhanceResponse handleFailWithoutBreak(Blade blade, Level level) {
-        Level newLevel = Level.fromLevel(level.getLevel() - 1);
-        blade.updateLevel(newLevel);
-        return new EnhanceResponse(false, false);
-    }
-
-    private EnhanceResponse handleFailWithBreak(Blade blade) {
-        Level newLevel = Level.fromLevel(0);
-        blade.updateLevel(newLevel);
-        return new EnhanceResponse(false, true);
-    }
-
-    private EnhanceResponse handleSuccess(Blade blade, Level level) {
-        Level newLevel = Level.fromLevel(level.getLevel() + 1);
-        blade.updateLevel(newLevel);
-        bladeRepository.save(blade);
-        return new EnhanceResponse(true, false);
     }
 }

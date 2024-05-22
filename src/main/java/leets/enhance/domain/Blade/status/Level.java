@@ -1,5 +1,6 @@
 package leets.enhance.domain.Blade.status;
 
+import leets.enhance.domain.Blade.exception.LevelNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -31,6 +32,6 @@ public enum Level {
         return Arrays.stream(Level.values())
                 .filter(l -> l.getLevel().equals(level))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(LevelNotFoundException::new);
     }
 }
