@@ -9,7 +9,7 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum Level {
-    LV0(0, 0.9, 0.05),
+    LV0(0, 1.0, 0.05),
     LV1(1, 0.9, 0.05),
     LV2(2, 0.8, 0.05),
     LV3(3, 0.7, 0.05),
