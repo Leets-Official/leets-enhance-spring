@@ -50,7 +50,7 @@ public class SecurityConfig {
                         authorize.requestMatchers("/user/**").permitAll()
                                 .requestMatchers(("/item/top10")).permitAll()
                                 .anyRequest()
-                                .permitAll()
+                                .authenticated()
                 );
 
         http
