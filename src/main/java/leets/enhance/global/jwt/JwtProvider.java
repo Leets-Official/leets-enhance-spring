@@ -55,10 +55,7 @@ public class JwtProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
-        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority(claims.get("role").toString()));
-
-        return new UsernamePasswordAuthenticationToken(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(claims.getSubject(), "");
     }
 
     private Claims parseClaims(String token) {

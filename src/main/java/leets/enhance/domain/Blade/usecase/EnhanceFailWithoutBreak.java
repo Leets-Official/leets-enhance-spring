@@ -17,6 +17,6 @@ public class EnhanceFailWithoutBreak implements EnhanceResultHandler{
         Level newLevel = Level.fromLevel(level.getLevel() - 1);
         blade.updateLevel(newLevel);
         bladeRepository.save(blade);
-        return new EnhanceResponse(true, false);
+        return new EnhanceResponse(false, false);
     }
 }
