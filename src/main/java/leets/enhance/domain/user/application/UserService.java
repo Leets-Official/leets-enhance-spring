@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
-
     public SignUpResponse register(SignUpRequest userRequest) throws Exception{
         String email = userRequest.email();
         if(userRepository.findByEmail(email).isPresent()) throw new ConflictIdException();
@@ -27,6 +26,7 @@ public class UserService {
                 .email(email)
                 .nickname(userRequest.name())
                 .password(userRequest.password())
+                .increasingProbability(3)
                 .build();
         userRepository.save(user);
         return SignUpResponse.of(user);
@@ -34,7 +34,7 @@ public class UserService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         User user = checkValidUser(loginRequest);
-        return LoginResponse.from(user,tokenProvider.createToken(user.getEmail()));
+        return LoginResponse.from(user,tokenProvider.createToken(loginRequest.email()));
     }
 
     public User checkValidUser(LoginRequest loginRequest) {

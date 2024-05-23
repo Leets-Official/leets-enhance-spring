@@ -1,12 +1,11 @@
 package leets.enhance.global.jwt;
 
 
+
 import io.jsonwebtoken.*;
-import leets.enhance.global.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 

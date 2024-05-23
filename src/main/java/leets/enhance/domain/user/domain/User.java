@@ -1,11 +1,12 @@
 package leets.enhance.domain.user.domain;
 
 import jakarta.persistence.*;
+import leets.enhance.domain.weapon.domain.Weapon;
 import lombok.*;
 
 import java.util.UUID;
 
-@Setter
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +27,7 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private Integer increasingProbability;
 }
