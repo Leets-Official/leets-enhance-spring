@@ -3,12 +3,16 @@ package leets.enhance.domain.user.application;
 import leets.enhance.domain.user.dao.UserRepository;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.dto.JoinDto;
+import leets.enhance.domain.user.dto.LoginDto;
 import leets.enhance.domain.user.dto.ResponseDto;
+import leets.enhance.domain.user.dto.TokenDto;
 import leets.enhance.global.CustomException;
 import leets.enhance.global.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +47,14 @@ public class UserService {
 
     }
 
+    public TokenDto login(LoginDto loginDto) {
+        User user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(()-> new CustomException("존재하지 않는 이메일입니다!"));
 
+        if(!bCryptPasswordEncoder.matches(loginDto.getPassword(),user.getPassword())){
+            throw new CustomException("비밀번호가 일치하지 않습니다!");
+        }
 
+        return TokenDto.build(user, jwtUtil.createJwt(loginDto.getEmail(), 60*60*10L));
+    }
 }

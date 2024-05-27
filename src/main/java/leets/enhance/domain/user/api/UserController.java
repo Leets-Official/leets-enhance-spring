@@ -2,7 +2,9 @@ package leets.enhance.domain.user.api;
 
 import leets.enhance.domain.user.application.UserService;
 import leets.enhance.domain.user.dto.JoinDto;
+import leets.enhance.domain.user.dto.LoginDto;
 import leets.enhance.domain.user.dto.ResponseDto;
+import leets.enhance.domain.user.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +29,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.register(joinDto));
     }
 
+    //로그인
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(loginDto));
+    }
 
 }

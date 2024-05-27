@@ -33,7 +33,7 @@ public class JWTUtil {
         return Jwts.builder()
                 .claim("joinId", joinId)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                //.expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
     }
