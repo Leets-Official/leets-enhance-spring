@@ -13,7 +13,6 @@ public enum Level {
         LV6(6, 10, 15),
         LV7(7, 3, 20);
 
-
         private final int level;
         private final int successRate;
         private final int destroyRate;

@@ -35,7 +35,6 @@ public class WeaponService {
     private static final int MAX_DESTROY_RATE = 50;
 
     public void createWeapon(Authentication authentication, CreateWeaponRequest createWeaponRequest) {
-
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         if (weaponRepository.findByUser(user).isPresent()) {
             throw new WeaponAlreadyExistException();
@@ -46,36 +45,48 @@ public class WeaponService {
     public EnhanceResponse executeEnhance(Authentication authentication, EnhanceRequest request) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Weapon weapon = weaponRepository.findByUser(user).orElseThrow(WeaponNotFoundException::new);
-        Random random = new Random();
-        Integer increase = ((isUsedIncreaseProbability(user,request.useIncreaseProbability()))? 30 : 0);
-        WeaponResponseMessage weaponResponseMessage;
-        Integer level = weapon.getLevel();
-        Level currentLevel = getValidLevel(level);
-        if (random.nextInt(100) < currentLevel.getSuccessRate()+increase) {
-            level = weapon.getLevel() + 1;
-            weaponResponseMessage = UPGRADE_SUCCESS;
-        } else {
-            weaponResponseMessage = UPGRADE_FAILED;
-            if (random.nextInt(100) < Math.min(currentLevel.getDestroyRate(), MAX_DESTROY_RATE)) {
-                weaponResponseMessage = LEVEL_DOWN;
-                level = weapon.getLevel() - 1;
-                if (random.nextInt(100) < 50) {
-                    weaponResponseMessage = DESTROYED;
-                    level = 0;
-                }
-            }
-        }
-        weaponRepository.save(Weapon.updateWeapon(weapon, level));
-        return new EnhanceResponse(weaponResponseMessage, level);
+        Integer increase = calculateIncreaseProbability(user, request);
+        EnhanceResponse result = enhanceWeapon(weapon,increase);
+        weaponRepository.save(Weapon.updateWeapon(weapon, result.level()));
+        return new EnhanceResponse(result.weaponResponseMessage(), result.level());
     }
 
+    private EnhanceResponse enhanceWeapon(Weapon weapon, Integer increase) {
+        Random random = new Random();
+        Integer level = weapon.getLevel();
+        Level currentLevel = getValidLevel(level);
+
+        if (random.nextInt(100) < currentLevel.getSuccessRate() + increase) {
+            return new EnhanceResponse(UPGRADE_SUCCESS, level + 1);
+        } else {
+            return handleFailure(random, level, currentLevel);
+        }
+    }
+
+    private EnhanceResponse handleFailure(Random random, Integer level, Level currentLevel) {
+        if (random.nextInt(100) < Math.min(currentLevel.getDestroyRate(), MAX_DESTROY_RATE)) {
+            level--;
+            if (random.nextInt(100) < 50) {
+                return new EnhanceResponse(DESTROYED, 0);
+            } else {
+                return new EnhanceResponse(LEVEL_DOWN, level);
+            }
+        }
+        return new EnhanceResponse(UPGRADE_FAILED, level);
+    }
+
+    private Integer calculateIncreaseProbability(User user, EnhanceRequest request) {
+        return isUsedIncreaseProbability(user, request.useIncreaseProbability()) ? 30 : 0;
+    }
 
     public Boolean isUsedIncreaseProbability(User user, Boolean useIncreaseProbability) {
         if (useIncreaseProbability && user.getIncreasingProbability() <= 0) {
             throw new NoItemException();
-        } else {
+        } else if (useIncreaseProbability) {
             userRepository.save(User.decreaseItem(user));
             return true;
+        } else {
+            return false;
         }
     }
 
