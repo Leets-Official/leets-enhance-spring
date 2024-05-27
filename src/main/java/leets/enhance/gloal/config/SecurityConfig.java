@@ -49,7 +49,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/users/**","items/top10").permitAll()
-                        .requestMatchers("/items/**", "/enhance").hasRole("USER")
+                        .requestMatchers("/items/**", "/enhance").permitAll()
                         .anyRequest().permitAll()
                 )
 
