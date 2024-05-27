@@ -6,20 +6,21 @@ import leets.enhance.domain.user.repository.UserRepository;
 import leets.enhance.domain.weapon.Level;
 import leets.enhance.domain.weapon.WeaponResponseMessage;
 import leets.enhance.domain.weapon.domain.Weapon;
-import leets.enhance.domain.weapon.dto.CreateWeaponRequest;
-import leets.enhance.domain.weapon.dto.EnhanceRequest;
-import leets.enhance.domain.weapon.dto.EnhanceResponse;
-import leets.enhance.domain.weapon.dto.GetItemsResponse;
+import leets.enhance.domain.weapon.dto.*;
 import leets.enhance.domain.weapon.exception.NoItemException;
 import leets.enhance.domain.weapon.exception.WeaponAlreadyExistException;
 import leets.enhance.domain.weapon.exception.WeaponNotFoundException;
 import leets.enhance.domain.weapon.repository.WeaponRepository;
 import leets.enhance.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 import java.util.Random;
 
@@ -82,6 +83,15 @@ public class WeaponService {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Weapon weapon = weaponRepository.findByUser(user).orElseThrow(WeaponNotFoundException::new);
         return GetItemsResponse.from(user,weapon);
+    }
+
+    public List<GetItemsTopResponse> getItemsTop() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("level").descending());
+
+        return weaponRepository.findAllByOrderByLevelDesc(pageable)
+                .stream()
+                .map(GetItemsTopResponse::of)
+                .toList();
     }
 
     public Level getValidLevel(Integer level) {

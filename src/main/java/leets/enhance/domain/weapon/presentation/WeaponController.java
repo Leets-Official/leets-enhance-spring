@@ -1,16 +1,14 @@
 package leets.enhance.domain.weapon.presentation;
 
 import leets.enhance.domain.weapon.application.WeaponService;
-import leets.enhance.domain.weapon.dto.CreateWeaponRequest;
-import leets.enhance.domain.weapon.dto.EnhanceRequest;
-import leets.enhance.domain.weapon.dto.EnhanceResponse;
-import leets.enhance.domain.weapon.dto.GetItemsResponse;
+import leets.enhance.domain.weapon.dto.*;
 import leets.enhance.global.dto.ResponseDto;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -34,6 +32,11 @@ public class WeaponController {
 
     @GetMapping(value = "/items")
     public ResponseDto<GetItemsResponse> getItems(Authentication authentication) {
-        return ResponseDto.of(OK.value(),SUCCESS_GET.getMessage(),weaponService.getItems(authentication));
+        return ResponseDto.of(OK.value(), SUCCESS_GET.getMessage(), weaponService.getItems(authentication));
+    }
+
+    @GetMapping(value = "/items/top10")
+    public ResponseDto<List<GetItemsTopResponse>> getItemsTop() {
+        return ResponseDto.of(OK.value(), SUCCESS_GET.getMessage(),weaponService.getItemsTop());
     }
 }

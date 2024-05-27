@@ -11,7 +11,7 @@ public record GetItemsResponse(
     public static GetItemsResponse from(User user, Weapon weapon) {
         return new GetItemsResponse(
                 weapon.getWeaponName(),
-                "lv"+ weapon.getLevel().toString(),
+                "lv."+ weapon.getLevel().toString(),
                 user.getIncreasingProbability()
         );
     }
