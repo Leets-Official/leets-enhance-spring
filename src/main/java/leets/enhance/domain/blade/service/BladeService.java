@@ -9,6 +9,7 @@ import leets.enhance.domain.blade.dto.GetMyBladeResponse;
 import leets.enhance.domain.blade.dto.Top10BladeResponse;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;
+import leets.enhance.gloal.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,12 @@ import java.util.stream.Collectors;
 public class BladeService {
     private final BladeRepository bladeRepository;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     @Transactional
-    public BladeCreateResponse createBlade(BladeCreateRequest bladeCreateRequest, String userEmail) {
+    public BladeCreateResponse createBlade(String authorizationHeader, BladeCreateRequest bladeCreateRequest) {
+        String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
+
         if (bladeCreateRequest.name().length() > 5) {
             throw new IllegalStateException("이름은 5자 이하로 입력해주세요.");
         }
@@ -39,33 +43,27 @@ public class BladeService {
         return BladeCreateResponse.of(bladeRepository.save(blade), blade.getUser());
     }
 
-    public GetMyBladeResponse getMyBlade(String userEmail) {
+    public GetMyBladeResponse getMyBlade(String authorizationHeader) {
+        String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
         User user = userRepository.findByUsername(userEmail);
-        Blade blade = bladeRepository.findByUser(user);
-
-        if(blade == null) {
-            throw new IllegalStateException("검색된 검이 없습니다.");
-        }
+        Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
 
         return GetMyBladeResponse.of(blade, user);
     }
 
     @Transactional
-    public String enhance(String userEmail) {
+    public String enhance(String authorizationHeader) {
+        String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
         User user = userRepository.findByUsername(userEmail);
-        Blade blade = bladeRepository.findByUser(user);
+        Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
 
-        if(blade == null) {
-            throw new IllegalStateException("검이 없습니다.");
-        }
-
-        if(Math.random() <= blade.getLevel().getSuccessProbability()) {
+        if (Math.random() <= blade.getLevel().getSuccessProbability()) {
             blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() + 1));
             bladeRepository.save(blade);
             return "강화에 성공했습니다.";
         }
 
-        if(Math.random() <= blade.getLevel().getDestroyProbability()) {
+        if (Math.random() <= blade.getLevel().getDestroyProbability()) {
             blade.updateLevel(BladeLevel.fromLevel(0));
             bladeRepository.save(blade);
             return "검이 파괴되었습니다.";
