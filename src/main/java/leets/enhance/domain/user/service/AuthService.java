@@ -31,11 +31,6 @@ public class AuthService {
 
     @Transactional
     public UserResponse signup(UserRegisterRequest userRegisterRequest) {
-        if (!userRegisterRequest.password().equals(userRegisterRequest.confirmPassword())) {
-            log.info("Password does not match");
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
-        }
-
         User user = userRegisterRequest.toUser(passwordEncoder);
         log.info("User {} registered", userRegisterRequest.name());
         return UserResponse.of(userRepository.save(user));

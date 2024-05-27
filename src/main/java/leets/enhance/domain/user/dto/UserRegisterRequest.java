@@ -13,8 +13,6 @@ public record UserRegisterRequest(
         @NotBlank
         String password,
         @NotBlank
-        String confirmPassword,
-        @NotBlank
         String name
 
 ) {
@@ -23,7 +21,7 @@ public record UserRegisterRequest(
         return User.builder()
                 .username(email)
                 .password(passwordEncoder.encode(password))
-                .confirmPassword(passwordEncoder.encode(confirmPassword))
+                .upgradeCouponRemaining(3)
                 .name(name)
                 .roles(Collections.singletonList("USER"))
                 .build();

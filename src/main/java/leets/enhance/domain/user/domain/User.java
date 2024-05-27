@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    private String confirmPassword;
+    private Integer upgradeCouponRemaining;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
