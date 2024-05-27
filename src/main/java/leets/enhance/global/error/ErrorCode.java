@@ -15,7 +15,8 @@ public enum ErrorCode {
     ID_CONFLICT(409, "ID_CONFLICT", "이미 사용중인 아이디입니다."),
     USER_NOT_FOUND(404,"USER_NOT_FOUND","유저를 찾을 수 없습니다"),
     WEAPON_NOT_FOUND(404,"WEAPON_NOT_FOUND","무기를 찾을 수 없습니다"),
-    ALREADY_EXIST(404,"ALREADY_EXIST","이미 무기를 가지고 있습니다.");
+    ALREADY_EXIST(404,"ALREADY_EXIST","이미 무기를 가지고 있습니다."),
+    NO_ITEM(404,"NO_ITEM","확률강화권이 부족합니다");
     private final int httpStatus;
     private final String code;
     private final String message;

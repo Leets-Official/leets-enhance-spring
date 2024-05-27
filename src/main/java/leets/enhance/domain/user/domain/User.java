@@ -30,4 +30,14 @@ public class User {
 
     @Column(nullable = false)
     private Integer increasingProbability;
+
+    public static User decreaseItem(User user) {
+        return User.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .password(user.getPassword())
+                .increasingProbability(user.getIncreasingProbability()-1)
+                .build();
+    }
 }
