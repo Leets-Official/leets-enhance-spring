@@ -26,8 +26,7 @@ public class Blade {
     @Column(nullable = false)
     private BladeLevel level;
 
-    @OneToOne
-    @JoinColumn(name = "uid")
+    @OneToOne(mappedBy = "blade")
     private User user;
 
     public void updateLevel(BladeLevel level) {

@@ -29,6 +29,7 @@ public class BladeService {
     @Transactional
     public BladeCreateResponse createBlade(String authorizationHeader, BladeCreateRequest bladeCreateRequest) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
+        User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
 
         if (bladeCreateRequest.name().length() > 5) {
             throw new IllegalStateException("이름은 5자 이하로 입력해주세요.");
@@ -37,15 +38,17 @@ public class BladeService {
         Blade blade = Blade.builder()
                 .name(bladeCreateRequest.name())
                 .level(BladeLevel.fromLevel(1))
-                .user(userRepository.findByUsername(userEmail))
+                .user(user)
                 .build();
+
+        user.createBlade(blade);
 
         return BladeCreateResponse.of(bladeRepository.save(blade), blade.getUser());
     }
 
     public GetMyBladeResponse getMyBlade(String authorizationHeader) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
-        User user = userRepository.findByUsername(userEmail);
+        User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
         Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
 
         return GetMyBladeResponse.of(blade, user);
@@ -54,7 +57,7 @@ public class BladeService {
     @Transactional
     public String enhance(String authorizationHeader) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
-        User user = userRepository.findByUsername(userEmail);
+        User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
         Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
 
         if (Math.random() <= blade.getLevel().getSuccessProbability()) {

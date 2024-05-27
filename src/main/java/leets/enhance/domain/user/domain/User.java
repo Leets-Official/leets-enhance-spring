@@ -2,6 +2,7 @@ package leets.enhance.domain.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import leets.enhance.domain.blade.domain.Blade;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +42,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Integer upgradeCouponRemaining;
 
+    @OneToOne
+    @JoinColumn(name = "uid")
+    private Blade blade;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
@@ -70,5 +75,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void createBlade(Blade blade) {
+        this.blade = blade;
     }
 }
