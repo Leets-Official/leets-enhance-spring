@@ -3,7 +3,6 @@ package leets.enhance.gloal.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import leets.enhance.domain.user.domain.User;
 import leets.enhance.gloal.jwt.dto.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +58,7 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken) {
-        // 토큰 복호화
+
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
@@ -73,10 +72,8 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // User 객체를 만들어서 Authentication 리턴
-        User principal = new User();
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        // Authentication 리턴
+        return new UsernamePasswordAuthenticationToken(claims.getSubject(), "", authorities);
     }
 
     public boolean validateToken(String token) {
@@ -105,15 +102,5 @@ public class TokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
-    }
-
-    public String getUsernameFromToken(String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer")) {
-            throw new IllegalStateException("토큰이 존재하지 않습니다.");
-        }
-        String token = authorizationHeader.substring(7);
-
-        Claims claims = parseClaims(token);
-        return claims.getSubject();
     }
 }
