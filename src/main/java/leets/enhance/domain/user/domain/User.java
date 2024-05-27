@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private String pwd;
+    private String password;
     private String name;
     @OneToOne(mappedBy = "user")
     private Item item;
