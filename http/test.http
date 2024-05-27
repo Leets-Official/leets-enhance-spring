@@ -1,12 +1,10 @@
 ### 1. 회원가입
 POST localhost:8080/users/register
-Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
   "email": "test@naver.com",
   "password": "test",
-  "confirmPassword": "test",
   "name": "test"
 }
 
@@ -29,7 +27,7 @@ Content-Type: application/json
 
 ### 4. 검 추가
 POST localhost:8080/items
-Authorization: Bearer {{access_token}}
+Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
@@ -38,11 +36,11 @@ Content-Type: application/json
 
 ### 5. 내 검 조회
 GET localhost:8080/items
-Authorization: Bearer {{access_token}}
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 ### 6. 강화
 POST localhost:8080/enhance
-Authorization: Bearer {{access_token}}
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 ### 7. 상위 10개 아리템 조회
 GET localhost:8080/items/top10
