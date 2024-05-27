@@ -22,7 +22,7 @@ public class BladeController {
         return ResponseEntity.ok(bladeService.createBlade(authorizationHeader, bladeCreateRequest));
     }
 
-    @GetMapping("/items")
+    @PatchMapping("/items")
     public ResponseEntity<GetMyBladeResponse> getMyBlade(@RequestHeader("Authorization") String authorizationHeader) {
         return ResponseEntity.ok(bladeService.getMyBlade(authorizationHeader));
     }

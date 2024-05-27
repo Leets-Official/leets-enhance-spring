@@ -43,7 +43,7 @@ public class User implements UserDetails {
     private Integer upgradeCouponRemaining;
 
     @OneToOne
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "blade_uid")
     private Blade blade;
 
     @ElementCollection(fetch = FetchType.EAGER)
