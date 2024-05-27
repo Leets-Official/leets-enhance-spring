@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum WeaponResponseMessage {
     SUCCESS_CREATE("생성에 성공했습니다."),
     SUCCESS_UPDATE("변경에 성공했습니다."),
+    SUCCESS_GET("조회에 성공했습니다"),
     UPGRADE_SUCCESS("강화 성공!"),
     UPGRADE_FAILED("강화 실패"),
     LEVEL_DOWN("레벨 하락"),

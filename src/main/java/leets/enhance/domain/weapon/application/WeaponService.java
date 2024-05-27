@@ -9,6 +9,7 @@ import leets.enhance.domain.weapon.domain.Weapon;
 import leets.enhance.domain.weapon.dto.CreateWeaponRequest;
 import leets.enhance.domain.weapon.dto.EnhanceRequest;
 import leets.enhance.domain.weapon.dto.EnhanceResponse;
+import leets.enhance.domain.weapon.dto.GetItemsResponse;
 import leets.enhance.domain.weapon.exception.NoItemException;
 import leets.enhance.domain.weapon.exception.WeaponAlreadyExistException;
 import leets.enhance.domain.weapon.exception.WeaponNotFoundException;
@@ -75,6 +76,12 @@ public class WeaponService {
             userRepository.save(User.decreaseItem(user));
             return true;
         }
+    }
+
+    public GetItemsResponse getItems(Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        Weapon weapon = weaponRepository.findByUser(user).orElseThrow(WeaponNotFoundException::new);
+        return GetItemsResponse.from(user,weapon);
     }
 
     public Level getValidLevel(Integer level) {
