@@ -3,10 +3,7 @@ package leets.enhance.domain.blade.service;
 import leets.enhance.domain.blade.domain.Blade;
 import leets.enhance.domain.blade.domain.BladeLevel;
 import leets.enhance.domain.blade.domain.repository.BladeRepository;
-import leets.enhance.domain.blade.dto.BladeCreateRequest;
-import leets.enhance.domain.blade.dto.BladeCreateResponse;
-import leets.enhance.domain.blade.dto.GetMyBladeResponse;
-import leets.enhance.domain.blade.dto.Top10BladeResponse;
+import leets.enhance.domain.blade.dto.*;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;
 import leets.enhance.gloal.jwt.JwtService;
@@ -55,12 +52,20 @@ public class BladeService {
     }
 
     @Transactional
-    public String enhance(String authorizationHeader) {
+    public String enhance(String authorizationHeader, BladeEnhanceRequest bladeEnhanceRequest) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
         User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
         Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
+        int increaseProbability = 0;
 
-        if (Math.random() <= blade.getLevel().getSuccessProbability()) {
+        if (bladeEnhanceRequest.UseCoupon()) {
+            if (user.getUpgradeCouponRemaining() == 0) {
+                return "강화권이 부족합니다.";
+            }
+            increaseProbability = 10;
+        }
+
+        if (Math.random() <= blade.getLevel().getSuccessProbability() + increaseProbability) {
             blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() + 1));
             bladeRepository.save(blade);
             return "강화에 성공했습니다.";

@@ -1,10 +1,7 @@
 package leets.enhance.domain.blade.controller;
 
 import jakarta.validation.Valid;
-import leets.enhance.domain.blade.dto.BladeCreateRequest;
-import leets.enhance.domain.blade.dto.BladeCreateResponse;
-import leets.enhance.domain.blade.dto.GetMyBladeResponse;
-import leets.enhance.domain.blade.dto.Top10BladeResponse;
+import leets.enhance.domain.blade.dto.*;
 import leets.enhance.domain.blade.service.BladeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +25,8 @@ public class BladeController {
     }
 
     @PostMapping("/enhance")
-    public ResponseEntity<String> enhance(@RequestHeader("Authorization") String authorizationHeader) {
-        return ResponseEntity.ok(bladeService.enhance(authorizationHeader));
+    public ResponseEntity<String> enhance(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid BladeEnhanceRequest bladeEnhanceRequest) {
+        return ResponseEntity.ok(bladeService.enhance(authorizationHeader, bladeEnhanceRequest));
     }
 
     @GetMapping("/items/top10")
