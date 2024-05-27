@@ -46,33 +46,9 @@ public class WeaponService {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new);
         Weapon weapon = weaponRepository.findByUser(user).orElseThrow(WeaponNotFoundException::new);
         Integer increase = calculateIncreaseProbability(user, request);
-        EnhanceResponse result = enhanceWeapon(weapon,increase);
-        weaponRepository.save(Weapon.updateWeapon(weapon, result.level()));
+        EnhanceResponse result = weapon.enhance(increase);
+        weaponRepository.save(weapon);
         return new EnhanceResponse(result.weaponResponseMessage(), result.level());
-    }
-
-    private EnhanceResponse enhanceWeapon(Weapon weapon, Integer increase) {
-        Random random = new Random();
-        Integer level = weapon.getLevel();
-        Level currentLevel = getValidLevel(level);
-
-        if (random.nextInt(100) < currentLevel.getSuccessRate() + increase) {
-            return new EnhanceResponse(UPGRADE_SUCCESS, level + 1);
-        } else {
-            return handleFailure(random, level, currentLevel);
-        }
-    }
-
-    private EnhanceResponse handleFailure(Random random, Integer level, Level currentLevel) {
-        if (random.nextInt(100) < Math.min(currentLevel.getDestroyRate(), MAX_DESTROY_RATE)) {
-            level--;
-            if (random.nextInt(100) < 50) {
-                return new EnhanceResponse(DESTROYED, 0);
-            } else {
-                return new EnhanceResponse(LEVEL_DOWN, level);
-            }
-        }
-        return new EnhanceResponse(UPGRADE_FAILED, level);
     }
 
     private Integer calculateIncreaseProbability(User user, EnhanceRequest request) {
