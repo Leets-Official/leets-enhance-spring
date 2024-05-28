@@ -3,11 +3,15 @@ package leets.enhance.domain.item.application;
 import leets.enhance.domain.item.dao.ItemRepository;
 import leets.enhance.domain.item.domain.Item;
 import leets.enhance.domain.item.dto.ItemResponseDto;
+import leets.enhance.domain.item.dto.RankItemDto;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.global.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +44,13 @@ public class ItemService {
         Item item = itemRepository.findByUserId(user.getId());
 
         return ItemResponseDto.build(item);
+
+    }
+
+    public List<RankItemDto> get10Item() {
+        return itemRepository.findTop10ByOrderByLevelDesc().stream()
+                .map(item -> RankItemDto.build(item))
+                .collect(Collectors.toList());
 
     }
 }
