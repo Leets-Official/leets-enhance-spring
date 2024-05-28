@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ItemService {
     public ItemResponseDto createItem(Authentication authentication, String name) {
-
+        System.out.println(authentication.getPrincipal());
         return null;
     }
 }

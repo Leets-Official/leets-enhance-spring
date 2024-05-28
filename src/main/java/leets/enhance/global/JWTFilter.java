@@ -58,14 +58,17 @@ public class JWTFilter extends OncePerRequestFilter {
 
         //토큰에서 username 획득
         String username = jwtUtil.getUsername(token);
+        System.out.println(username);
         Optional<User> user = userRepository.findByEmail(username);
 
         if(user.isPresent()){
             //스프링 시큐리티 인증 토큰 생성
             Authentication authToken = new UsernamePasswordAuthenticationToken(user.get(), null);
+            System.out.println(user.get().getEmail());
             //세션에 사용자 등록
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
+
 
         filterChain.doFilter(request, response);
     }
