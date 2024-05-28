@@ -62,6 +62,8 @@ public class BladeService {
             if (user.getUpgradeCouponRemaining() == 0) {
                 return "강화권이 부족합니다.";
             }
+
+            user.useUpgradeCoupon();
             increaseProbability = 0.1;
         }
 

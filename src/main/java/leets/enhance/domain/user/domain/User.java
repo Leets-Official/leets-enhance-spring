@@ -80,4 +80,8 @@ public class User implements UserDetails {
     public void createBlade(Blade blade) {
         this.blade = blade;
     }
+
+    public void useUpgradeCoupon() {
+        this.upgradeCouponRemaining--;
+    }
 }
