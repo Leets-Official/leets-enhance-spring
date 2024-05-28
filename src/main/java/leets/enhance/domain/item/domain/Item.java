@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
@@ -20,4 +20,5 @@ public class Item {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }
