@@ -33,4 +33,13 @@ public class ItemService {
 
         return ItemResponseDto.build(item);
     }
+
+    public ItemResponseDto getItem(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        Item item = itemRepository.findByUserId(user.getId());
+
+        return ItemResponseDto.build(item);
+
+    }
 }

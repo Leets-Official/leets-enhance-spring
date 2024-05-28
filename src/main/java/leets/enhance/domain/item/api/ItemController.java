@@ -23,5 +23,12 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(itemService.createItem(authentication, name));
     }
 
+    //아이템 조회
+    @GetMapping
+    public ResponseEntity<ItemResponseDto> getItem(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.getItem(authentication));
+    }
+
 
 }
