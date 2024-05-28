@@ -56,13 +56,13 @@ public class BladeService {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
         User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
         Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
-        int increaseProbability = 0;
+        double increaseProbability = 0;
 
         if (bladeEnhanceRequest.UseCoupon()) {
             if (user.getUpgradeCouponRemaining() == 0) {
                 return "강화권이 부족합니다.";
             }
-            increaseProbability = 10;
+            increaseProbability = 0.1;
         }
 
         if (Math.random() <= blade.getLevel().getSuccessProbability() + increaseProbability) {
