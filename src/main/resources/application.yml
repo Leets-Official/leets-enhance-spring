@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: enhance
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/enhance
+    username: root
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      format_sql=true: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+jwt:
+  issuer: ${jwt.issuer}
+  secret_key: ${jwt.secret_key}
