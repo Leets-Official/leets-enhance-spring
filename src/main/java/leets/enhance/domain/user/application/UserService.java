@@ -1,14 +1,15 @@
-package leets.attendance.domain.user.application;
+package leets.enhance.domain.user.application;
 
-import leets.attendance.domain.user.domain.User;
-import leets.attendance.domain.user.exception.InvalidPasswordException;
-import leets.attendance.domain.user.exception.UserNotFoundException;
-import leets.attendance.domain.user.presentation.dto.Request.LoginRequestDto;
-import leets.attendance.domain.user.presentation.dto.Response.DuplicationResponseDto;
-import leets.attendance.domain.user.presentation.dto.Response.TokenResponseDto;
-import leets.attendance.domain.user.repository.UserRepository;
-import leets.attendance.domain.user.presentation.dto.Request.RegisterRequestDto;
-import leets.attendance.global.jwt.TokenProvider;
+
+import leets.enhance.domain.user.domain.User;
+import leets.enhance.domain.user.exception.InvalidPasswordException;
+import leets.enhance.domain.user.exception.UserNotFoundException;
+import leets.enhance.domain.user.presentation.dto.Request.LoginRequestDto;
+import leets.enhance.domain.user.presentation.dto.Request.RegisterRequestDto;
+import leets.enhance.domain.user.presentation.dto.Response.DuplicationResponseDto;
+import leets.enhance.domain.user.presentation.dto.Response.TokenResponseDto;
+import leets.enhance.domain.user.repository.UserRepository;
+import leets.enhance.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,32 +25,24 @@ public class UserService {
 
     @Transactional
     public User register(RegisterRequestDto registerRequestDto){
-        User user = User.builder()
-                .userId(registerRequestDto.id())
-                .userPwd(passwordEncoder.encode(registerRequestDto.password()))
-                .name(registerRequestDto.name())
-                .part(registerRequestDto.part()).build();
+        User user = User.create(registerRequestDto, passwordEncoder);
         return userRepository.save(user);
-
     }
 
-    public DuplicationResponseDto checkDuplicateId(String joinId){
-        boolean isDuplicate = userRepository.existsByUserId(joinId);
-        return new DuplicationResponseDto(isDuplicate); //true, false로 중복확인
+    public DuplicationResponseDto checkDuplicateId(String email){
+        boolean isDuplicate = userRepository.existsByEmail(email);
+        return new DuplicationResponseDto(isDuplicate);
     }
 
     public TokenResponseDto login(LoginRequestDto loginRequestDto){
-        User user = userRepository.findByUserId(loginRequestDto.id()).orElseThrow(UserNotFoundException::new);
-        String password = loginRequestDto.password();
+        User user = userRepository.findByEmail(loginRequestDto.email()).orElseThrow(UserNotFoundException::new);
 
-        //복호화 후 체크해야하는데 시간이 없어서.. ^^..
-        if(!user.getUserPwd().equals(password)){
+        if (!passwordEncoder.matches(loginRequestDto.password(), user.getPassword())) {
             throw new InvalidPasswordException();
         }
 
-        String accessToken = tokenProvider.generateAccessToken(user);
-        String refreshToken = tokenProvider.generateRefreshToken(user);
-        return new TokenResponseDto(accessToken, refreshToken);
+        String accessToken = tokenProvider.generateToken(user);
+        return new TokenResponseDto(accessToken);
     }
 
 }

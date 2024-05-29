@@ -1,7 +1,8 @@
-package leets.attendance.domain.user.exception;
+package leets.enhance.domain.user.exception;
 
-import leets.attendance.global.error.dto.ErrorCode;
-import leets.attendance.global.error.exception.ServiceException;
+
+import leets.enhance.global.error.dto.ErrorCode;
+import leets.enhance.global.error.exception.ServiceException;
 
 public class InvalidPasswordException extends ServiceException {
     public InvalidPasswordException(){

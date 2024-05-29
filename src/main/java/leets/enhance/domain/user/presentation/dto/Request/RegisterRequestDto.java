@@ -1,19 +1,16 @@
-package leets.attendance.domain.user.presentation.dto.Request;
+package leets.enhance.domain.user.presentation.dto.Request;
 
 import jakarta.validation.constraints.NotNull;
-import leets.attendance.domain.user.domain.Part;
 
 public record RegisterRequestDto(
         @NotNull
-        String id,
+        String email,
 
         @NotNull
         String name,
 
         @NotNull
-        String password,
+        String password
 
-        @NotNull
-        Part part
 ) {
 }

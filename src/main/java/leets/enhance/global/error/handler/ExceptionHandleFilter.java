@@ -1,13 +1,14 @@
-package leets.attendance.global.error.handler;
+package leets.enhance.global.error.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import leets.attendance.global.error.dto.ErrorCode;
-import leets.attendance.global.error.dto.ErrorResponse;
-import leets.attendance.global.error.exception.ServiceException;
+
+import leets.enhance.global.error.dto.ErrorCode;
+import leets.enhance.global.error.dto.ErrorResponse;
+import leets.enhance.global.error.exception.ServiceException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;

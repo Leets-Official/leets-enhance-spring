@@ -1,4 +1,4 @@
-package leets.attendance.global.jwt;
+package leets.enhance.global.jwt;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

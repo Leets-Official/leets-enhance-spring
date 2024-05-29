@@ -1,4 +1,4 @@
-package leets.attendance.global.error.dto;
+package leets.enhance.global.error.dto;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

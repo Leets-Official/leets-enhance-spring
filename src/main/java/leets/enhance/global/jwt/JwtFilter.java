@@ -1,4 +1,4 @@
-package leets.attendance.global.jwt;
+package leets.enhance.global.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

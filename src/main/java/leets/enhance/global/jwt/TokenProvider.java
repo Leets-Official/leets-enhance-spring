@@ -1,16 +1,15 @@
-package leets.attendance.global.jwt;
+package leets.enhance.global.jwt;
 
 import io.jsonwebtoken.*;
-import leets.attendance.domain.user.domain.User;
-import leets.attendance.global.jwt.exception.ExpiredTokenException;
-import leets.attendance.global.jwt.exception.InvalidTokenException;
-import leets.attendance.global.jwt.exception.NotFoundTokenRoleException;
+import leets.enhance.domain.user.domain.User;
+import leets.enhance.global.jwt.exception.ExpiredTokenException;
+import leets.enhance.global.jwt.exception.InvalidTokenException;
+import leets.enhance.global.jwt.exception.NotFoundTokenRoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
 
 import java.time.Duration;
 import java.util.Collections;
@@ -22,12 +21,8 @@ import java.util.Set;
 public class TokenProvider {
     private final JwtProperties jwtProperties;
 
-    public String generateAccessToken(User user) {
+    public String generateToken(User user) {
         return makeToken(new Date(new Date().getTime() + Duration.ofDays(1).toMillis()), user);
-    }
-
-    public String generateRefreshToken(User user){
-        return makeToken(new Date(new Date().getTime() + Duration.ofDays(6).toMillis()), user);
     }
 
     private String makeToken(Date expiry, User user) {
@@ -37,7 +32,7 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(expiry)
-                .setSubject(user.getName())
+                .setSubject(user.getEmail())
                 .claim("ROLE","ROLE_USER")
                 .claim("id", user.getUserId())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())

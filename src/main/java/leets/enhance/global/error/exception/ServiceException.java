@@ -1,6 +1,6 @@
-package leets.attendance.global.error.exception;
+package leets.enhance.global.error.exception;
 
-import leets.attendance.global.error.dto.ErrorCode;
+import leets.enhance.global.error.dto.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

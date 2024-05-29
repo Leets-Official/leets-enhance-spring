@@ -1,7 +1,8 @@
-package leets.attendance.global.jwt.exception;
+package leets.enhance.global.jwt.exception;
 
-import leets.attendance.global.error.dto.ErrorCode;
-import leets.attendance.global.error.exception.ServiceException;
+
+import leets.enhance.global.error.dto.ErrorCode;
+import leets.enhance.global.error.exception.ServiceException;
 
 public class NotFoundTokenRoleException extends ServiceException {
     public NotFoundTokenRoleException(){
