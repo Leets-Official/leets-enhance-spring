@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/leets_upgrade
+    username: root
+    password: mymac1009
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
+jwt:
+  secret: f414f2ca4520989cdc5b650c03f5644da2b83f31c563f76a9f59b97a2ca2ca8e
