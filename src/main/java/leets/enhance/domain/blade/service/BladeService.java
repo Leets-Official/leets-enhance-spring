@@ -91,9 +91,8 @@ public class BladeService {
         return bladeEnhanceResponse;
     }
 
-    public List<Top10BladeResponse> getTop10Blade() {
-        List<Blade> top10Blade = bladeRepository.findTop10ByOrderByLevelDesc();
-        return top10Blade.stream()
+    public List<Top10BladeResponse> getTop10Blade() {;
+        return bladeRepository.findTop10ByOrderByLevelDesc().stream()
                 .map(Top10BladeResponse::of)
                 .collect(Collectors.toList());
     }
