@@ -1,4 +1,4 @@
-package leets.attendance.domain.common;
+package leets.enhance.domain.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

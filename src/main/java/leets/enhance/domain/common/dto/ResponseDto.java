@@ -1,4 +1,4 @@
-package leets.attendance.domain.common.dto;
+package leets.enhance.domain.common.dto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
