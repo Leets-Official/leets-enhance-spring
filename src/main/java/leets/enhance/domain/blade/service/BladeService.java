@@ -71,21 +71,24 @@ public class BladeService {
             increaseProbability = 0.1;
         }
 
+        BladeEnhanceResponse bladeEnhanceResponse;
+
         if (Math.random() <= blade.getLevel().getSuccessProbability() + increaseProbability) {
             blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() + 1));
-            bladeRepository.save(blade);
-            return BladeEnhanceResponse.of(blade, "강화에 성공했습니다.");
+            bladeEnhanceResponse = BladeEnhanceResponse.of(blade, "강화에 성공했습니다.");
         }
 
         if (Math.random() <= blade.getLevel().getDestroyProbability()) {
             blade.updateLevel(BladeLevel.fromLevel(0));
-            bladeRepository.save(blade);
-            return BladeEnhanceResponse.of(blade, "검이 파괴되었습니다.");
+            bladeEnhanceResponse = BladeEnhanceResponse.of(blade, "검이 파괴되었습니다.");
+        } else {
+            blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() - 1));
+            bladeEnhanceResponse = BladeEnhanceResponse.of(blade, "강화에 실패했습니다.");
         }
 
-        blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() - 1));
+
         bladeRepository.save(blade);
-        return BladeEnhanceResponse.of(blade, "강화에 실패했습니다.");
+        return bladeEnhanceResponse;
     }
 
     public List<Top10BladeResponse> getTop10Blade() {
