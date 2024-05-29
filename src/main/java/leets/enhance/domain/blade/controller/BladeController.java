@@ -14,12 +14,12 @@ import java.util.List;
 public class BladeController {
     private final BladeService bladeService;
 
-    @PostMapping("/items")
+    @PatchMapping("/items")
     public ResponseEntity<BladeCreateResponse> createBlade(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid BladeCreateRequest bladeCreateRequest) {
         return ResponseEntity.ok(bladeService.createBlade(authorizationHeader, bladeCreateRequest));
     }
 
-    @PatchMapping("/items")
+    @GetMapping("/items")
     public ResponseEntity<GetMyBladeResponse> getMyBlade(@RequestHeader("Authorization") String authorizationHeader) {
         return ResponseEntity.ok(bladeService.getMyBlade(authorizationHeader));
     }
