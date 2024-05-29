@@ -52,7 +52,7 @@ public class BladeService {
     }
 
     @Transactional
-    public String enhance(String authorizationHeader, BladeEnhanceRequest bladeEnhanceRequest) {
+    public BladeEnhanceResponse enhance(String authorizationHeader, BladeEnhanceRequest bladeEnhanceRequest) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
         User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
         Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
@@ -60,7 +60,7 @@ public class BladeService {
 
         if (bladeEnhanceRequest.UseCoupon()) {
             if (user.getUpgradeCouponRemaining() == 0) {
-                return "강화권이 부족합니다.";
+                throw new IllegalStateException("강화권이 부족합니다.");
             }
 
             user.useUpgradeCoupon();
@@ -70,18 +70,18 @@ public class BladeService {
         if (Math.random() <= blade.getLevel().getSuccessProbability() + increaseProbability) {
             blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() + 1));
             bladeRepository.save(blade);
-            return "강화에 성공했습니다.";
+            return BladeEnhanceResponse.of(blade, "강화에 성공했습니다.");
         }
 
         if (Math.random() <= blade.getLevel().getDestroyProbability()) {
             blade.updateLevel(BladeLevel.fromLevel(0));
             bladeRepository.save(blade);
-            return "검이 파괴되었습니다.";
+            return BladeEnhanceResponse.of(blade, "검이 파괴되었습니다.");
         }
 
         blade.updateLevel(BladeLevel.fromLevel(blade.getLevel().getLevel() - 1));
         bladeRepository.save(blade);
-        return "강화에 실패했습니다.";
+        return BladeEnhanceResponse.of(blade, "강화에 실패했습니다.");
     }
 
     public List<Top10BladeResponse> getTop10Blade() {

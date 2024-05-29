@@ -25,7 +25,7 @@ public class BladeController {
     }
 
     @PostMapping("/enhance")
-    public ResponseEntity<String> enhance(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid BladeEnhanceRequest bladeEnhanceRequest) {
+    public ResponseEntity<BladeEnhanceResponse> enhance(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid BladeEnhanceRequest bladeEnhanceRequest) {
         return ResponseEntity.ok(bladeService.enhance(authorizationHeader, bladeEnhanceRequest));
     }
 
