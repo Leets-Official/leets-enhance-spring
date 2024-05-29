@@ -4,8 +4,12 @@ import leets.enhance.domain.blade.domain.Blade;
 import leets.enhance.domain.blade.domain.BladeLevel;
 import leets.enhance.domain.blade.domain.repository.BladeRepository;
 import leets.enhance.domain.blade.dto.*;
+import leets.enhance.domain.user.exception.NoCouponException;
+import leets.enhance.domain.blade.exception.TooLongBladeNameException;
+import leets.enhance.domain.blade.exception.BladeNotFoundException;
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.domain.repository.UserRepository;
+import leets.enhance.domain.user.exception.UserNotFoundException;
 import leets.enhance.gloal.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +30,10 @@ public class BladeService {
     @Transactional
     public BladeCreateResponse createBlade(String authorizationHeader, BladeCreateRequest bladeCreateRequest) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
-        User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
+        User user = userRepository.findByUsername(userEmail).orElseThrow(UserNotFoundException::new);
 
         if (bladeCreateRequest.name().length() > 5) {
-            throw new IllegalStateException("이름은 5자 이하로 입력해주세요.");
+            throw new TooLongBladeNameException();
         }
 
         Blade blade = Blade.builder()
@@ -45,8 +49,8 @@ public class BladeService {
 
     public GetMyBladeResponse getMyBlade(String authorizationHeader) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
-        User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
-        Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
+        User user = userRepository.findByUsername(userEmail).orElseThrow(UserNotFoundException::new);
+        Blade blade = bladeRepository.findByUser(user).orElseThrow(BladeNotFoundException::new);
 
         return GetMyBladeResponse.of(blade, user);
     }
@@ -54,13 +58,13 @@ public class BladeService {
     @Transactional
     public BladeEnhanceResponse enhance(String authorizationHeader, BladeEnhanceRequest bladeEnhanceRequest) {
         String userEmail = jwtService.extractEmailFromToken(authorizationHeader);
-        User user = userRepository.findByUsername(userEmail).orElseThrow(IllegalStateException::new);
-        Blade blade = bladeRepository.findByUser(user).orElseThrow(IllegalStateException::new);
+        User user = userRepository.findByUsername(userEmail).orElseThrow(UserNotFoundException::new);
+        Blade blade = bladeRepository.findByUser(user).orElseThrow(BladeNotFoundException::new);
         double increaseProbability = 0;
 
         if (bladeEnhanceRequest.UseCoupon()) {
             if (user.getUpgradeCouponRemaining() == 0) {
-                throw new IllegalStateException("강화권이 부족합니다.");
+                throw new NoCouponException();
             }
 
             user.useUpgradeCoupon();
