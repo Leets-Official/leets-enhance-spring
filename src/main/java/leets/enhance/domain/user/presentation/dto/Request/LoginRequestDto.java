@@ -1,10 +1,10 @@
-package leets.attendance.domain.user.presentation.dto.Request;
+package leets.enhance.domain.user.presentation.dto.Request;
 
 import jakarta.validation.constraints.NotNull;
 
 public record LoginRequestDto(
         @NotNull
-        String id,
+        String email,
         @NotNull
         String password
 ) {
