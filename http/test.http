@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### 4. 검 추가
-POST localhost:8080/items
+PATCH localhost:8080/items
 Authorization: Bearer {{ACCESS_TOKEN}}
 Content-Type: application/json
 
@@ -41,6 +41,11 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 ### 6. 강화
 POST localhost:8080/enhance
 Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "UseCoupon": true
+}
 
 ### 7. 상위 10개 아리템 조회
 GET localhost:8080/items/top10
