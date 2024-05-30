@@ -14,8 +14,9 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED","유효하지 않은 토큰입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "만료된 토큰입니다."),
     NOT_FOUND_TOKEN_ROLL(HttpStatus.FORBIDDEN, "FORBIDDEN", "토큰의 ROLE을 확인할 수 없습니다."),
-    USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND,"USER_NOT_FOUND_EXCEPTION","사용자를 찾을 수 없습니다."),
-    INVALID_PASSWORD_EXCEPTION(HttpStatus.UNAUTHORIZED,"INVALID_PASSWORD_EXCEPTION","비밀번호가 일치하지 않습니다.");
+    USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND,"NOT_FOUND","사용자를 찾을 수 없습니다."),
+    INVALID_PASSWORD_EXCEPTION(HttpStatus.UNAUTHORIZED,"UNAUTHORIZED","비밀번호가 일치하지 않습니다."),
+    ALREADY_ITEM_EXCEPTION(HttpStatus.CONFLICT, "CONFLICT","이미 아이템이 존재합니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

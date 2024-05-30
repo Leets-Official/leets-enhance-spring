@@ -1,6 +1,5 @@
 package leets.enhance.domain.user.application;
 
-
 import leets.enhance.domain.user.domain.User;
 import leets.enhance.domain.user.exception.InvalidPasswordException;
 import leets.enhance.domain.user.exception.UserNotFoundException;
@@ -24,17 +23,17 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public User register(RegisterRequestDto registerRequestDto){
+    public User register(RegisterRequestDto registerRequestDto) {
         User user = User.create(registerRequestDto, passwordEncoder);
         return userRepository.save(user);
     }
 
-    public DuplicationResponseDto checkDuplicateId(String email){
+    public DuplicationResponseDto checkDuplicateId(String email) {
         boolean isDuplicate = userRepository.existsByEmail(email);
         return new DuplicationResponseDto(isDuplicate);
     }
 
-    public TokenResponseDto login(LoginRequestDto loginRequestDto){
+    public TokenResponseDto login(LoginRequestDto loginRequestDto) {
         User user = userRepository.findByEmail(loginRequestDto.email()).orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(loginRequestDto.password(), user.getPassword())) {
@@ -44,5 +43,4 @@ public class UserService {
         String accessToken = tokenProvider.generateToken(user);
         return new TokenResponseDto(accessToken);
     }
-
 }
