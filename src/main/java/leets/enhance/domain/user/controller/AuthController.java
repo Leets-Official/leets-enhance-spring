@@ -13,20 +13,21 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/users/register")
+    @PostMapping("/register")
     public ResponseEntity<UserResponse> signup(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         return ResponseEntity.ok(authService.signup(userRegisterRequest));
     }
 
-    @PostMapping("/users/login")
-    public ResponseEntity<Token> login(@RequestBody UserLoginRequest userLoginRequest) throws Exception{
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(@RequestBody UserLoginRequest userLoginRequest) {
         return ResponseEntity.ok(authService.login(userLoginRequest));
     }
 
-    @GetMapping("/users/check-duplicate-id")
+    @GetMapping("/check-duplicate-id")
     public ResponseEntity<Boolean> checkDuplicateId(@RequestBody @Valid DuplicateUserIdRequest duplicateUserIdRequest) {
         return ResponseEntity.ok(authService.checkDuplicateId(duplicateUserIdRequest));
     }
