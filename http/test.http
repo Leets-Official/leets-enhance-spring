@@ -1,0 +1,51 @@
+### 1. 회원가입
+POST localhost:8080/users/register
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "test",
+  "name": "test"
+}
+
+### 2. 로그인
+POST localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "test"
+}
+
+### 3. 중복 아이디 확인
+GET localhost:8080/users/check-duplicate-id
+Content-Type: application/json
+
+{
+  "email": "test@naver.com"
+}
+
+### 4. 검 추가
+PATCH localhost:8080/items
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "name": "검"
+}
+
+### 5. 내 검 조회
+GET localhost:8080/items
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+### 6. 강화
+POST localhost:8080/enhance
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+  "UseCoupon": true
+}
+
+### 7. 상위 10개 아리템 조회
+GET localhost:8080/items/top10
