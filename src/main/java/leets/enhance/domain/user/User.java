@@ -1,11 +1,10 @@
 package leets.enhance.domain.user;
 
 import jakarta.persistence.*;
-import leets.enhance.domain.item.Item;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,20 +19,17 @@ import java.util.stream.Collectors;
 @Entity
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length = 10, nullable = false)
+    private String id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, length = 255)
     private String swordName;
-
-    @OneToOne(mappedBy = "user")
-    private Item item;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -48,7 +44,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return this.id;
     }
 
     @Override
@@ -71,4 +67,5 @@ public class User implements UserDetails {
         return true;
     }
 }
+
 

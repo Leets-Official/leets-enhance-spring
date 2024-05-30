@@ -1,8 +1,12 @@
 package leets.enhance.global.utils;
 
+import leets.enhance.domain.user.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,10 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    @Autowired
     private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // REST API이므로 CSRF 보안을 사용하지 않음
                 .csrf(AbstractHttpConfigurer::disable)
@@ -28,9 +33,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 // 해당 API에 대해서는 모든 요청을 허가
-                                .requestMatchers("/members/sign-in").permitAll()
+                                .requestMatchers("/users/sign-in").permitAll()
+                                .requestMatchers("/users/sign-up").permitAll()
                                 // USER 권한이 있어야 요청할 수 있음
-                                .requestMatchers("/members/test").hasRole("USER")
+                                .requestMatchers("/users/test").hasRole("USER")
                                 // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                                 .anyRequest().authenticated()
                 )
@@ -44,5 +50,10 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         // BCrypt Encoder 사용
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

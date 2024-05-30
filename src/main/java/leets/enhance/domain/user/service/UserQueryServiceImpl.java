@@ -2,26 +2,20 @@ package leets.enhance.domain.user.service;
 
 import leets.enhance.domain.user.User;
 import leets.enhance.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class UserQueryServiceImpl implements UserQueryService{
-    private UserRepository memberRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUserId(Long id) throws UsernameNotFoundException {
-        return memberRepository.findById(id)
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException("해당하는 회원을 찾을 수 없습니다."));
-    }
-
-    // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 return
-    private UserDetails createUserDetails(User user) {
-        return User.builder()
-                .id(user.getId())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .build();
+    public UserDetails loadUserByUserId(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+        return new org.springframework.security.core.userdetails.User(user.getId(), user.getPassword(), user.getAuthorities());
     }
 }
