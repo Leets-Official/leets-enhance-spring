@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-@Entity
-@Table(name = "users")
+@Entity(name = "users")
 public class User implements UserDetails {
 
     @Id

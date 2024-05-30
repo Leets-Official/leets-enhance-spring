@@ -14,7 +14,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Builder
 @Entity
-@Table
 public class Blade {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
