@@ -15,7 +15,6 @@ import static leets.enhance.domain.user.presentation.UserResponseMessage.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@EnableJpaAuditing
 @RequestMapping("/users")
 public class UserController {
 
