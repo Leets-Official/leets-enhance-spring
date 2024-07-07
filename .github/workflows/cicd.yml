@@ -1,0 +1,65 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "hyxklee" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # gradle caching - 빌드 시간 향상
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*gradle*','**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
+
+      # 도커 이미지 생성 후 이미지 push
+      - name: Docker build & push to dev
+        run: |
+          docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_USER_PW }}
+          docker build -t hyxklee/hyxklee-test .
+          docker push hyxklee/hyxklee-test
+
+    #EC2 ssh 연결 후 이미지 pull
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_SECRET_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SECRET_PEM }}
+          envs: GITHUB_SHA
+          script: |
+            EXISTING_CONTAINER_ID=$(sudo docker ps -q -f "publish=8080" -f "status=running")
+            if [ ! -z "$EXISTING_CONTAINER_ID" ]; then
+              sudo docker stop $EXISTING_CONTAINER_ID
+              sudo docker rm $EXISTING_CONTAINER_ID
+            fi
+
+            EXISTING_CONTAINER_ID=$(sudo docker ps -q -f "publish=8080" -f "status=exited")
+            if [ ! -z "$EXISTING_CONTAINER_ID" ]; then
+              sudo docker rm $EXISTING_CONTAINER_ID
+            fi
+            
+            sudo docker pull hyxklee/hyxklee-test
+            sudo docker run --name spring -d -p 8080:8080 -e RDS_USER_NAME=${{ secrets.RDS_USER_NAME }} -e RDS_USER_PW=${{ secrets.RDS_USER_PW }} hyxklee/hyxklee-test
+            sudo docker image prune -a -f
